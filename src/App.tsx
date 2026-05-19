@@ -6,6 +6,7 @@ import { Good } from './types/Good';
 
 export const App: React.FC = () => {
   const [goods, setGoods] = useState<Good[]>([]);
+  const [error, setError] = useState<string>('');
 
   return (
     <div className="App">
@@ -15,7 +16,9 @@ export const App: React.FC = () => {
         type="button"
         data-cy="all-button"
         onClick={() => {
-          getAll().then(currentGoods => setGoods(currentGoods));
+          getAll()
+            .then(currentGoods => setGoods(currentGoods))
+            .catch(err => setError(err.message || 'Failed to fetch goods'));
         }}
       >
         Load all goods
@@ -25,7 +28,9 @@ export const App: React.FC = () => {
         type="button"
         data-cy="first-five-button"
         onClick={() => {
-          get5First().then(currentGoods => setGoods(currentGoods));
+          get5First()
+            .then(currentGoods => setGoods(currentGoods))
+            .catch(err => setError(err.message || 'Failed to fetch goods'));
         }}
       >
         Load 5 first goods
@@ -35,11 +40,15 @@ export const App: React.FC = () => {
         type="button"
         data-cy="red-button"
         onClick={() => {
-          getRedGoods().then(currentGoods => setGoods(currentGoods));
+          getRedGoods()
+            .then(currentGoods => setGoods(currentGoods))
+            .catch(err => setError(err.message || 'Failed to fetch goods'));
         }}
       >
         Load red goods
       </button>
+
+      {error && <p>{error}</p>}
 
       <GoodsList goods={goods} />
     </div>
